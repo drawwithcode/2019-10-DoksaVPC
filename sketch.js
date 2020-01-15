@@ -69,7 +69,8 @@ function draw() {
   //using the function to define the intensity of the sunlight
   var lightIntensity = map(sunLight, -1, 0, 0, 255);
 
-  background(20);
+  //background color changes according to the sunlight
+  background(lightIntensity *0.6 + 10, lightIntensity * 0.6, lightIntensity * 1);
   //soft ambient light
   ambientLight(100, 100, 120);
   //point light simulating the sun (it feels better than directional light to me)
@@ -93,7 +94,7 @@ function draw() {
     lightIntensity * 1.2,
     lightIntensity * 0.8
   );
-  sphere(40);
+  sphere(50);
   pop();
 
   //lets the user drag and move the camera
