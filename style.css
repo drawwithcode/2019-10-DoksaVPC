@@ -1,6 +1,6 @@
 .options {
   z-index: 999;
-  background-color: rgb(220, 220, 220);
+  background-color: rgb(230, 230, 230);
   padding: 20px;
   border-radius: 5px;
   border: 2px solid rgba(0, 0, 0, 0.3);
@@ -9,12 +9,13 @@
 button {
   background-color: rgb(180, 180, 180);
   border-style: none;
-  border-radius: 5px;
+  border-radius: 10px;
   width: 4vw;
   height: 4vw;
   margin: 5px;
   min-width: 30px;
   min-height: 30px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
 }
 
 button:hover {
@@ -26,6 +27,7 @@ button:hover {
 }
 #contemporary {
   background-image: url("./assets/contemporary-icon.svg");
+
 }
 #futuristic {
   background-image: url("./assets/futuristic-icon.svg");

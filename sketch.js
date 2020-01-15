@@ -13,8 +13,17 @@ var optionsDiv,
   button1,
   button2,
   button3;
+//declaring variables for the model and textures of the airplane
+var airplane, airplaneTex;
+//boolean variable that is set to true if the user selects the third style
+var airplaneIsShowing = false;
 
-function preload() {}
+function preload() {
+  //preloads the model of the airplane
+  airplane = loadModel("./assets/plane.obj",true);
+  //preloads the textures of the airplane
+  airplaneTex = loadImage("./assets/plane_tex.jpg")
+}
 
 function setup() {
   //create a canvas with WEBGL as renderer
@@ -24,7 +33,7 @@ function setup() {
   newCity(citySet[1]);
   //sets the starting position of the camera
   camera(0, -800, -2000, 0, 0, 0, 0, 1, 0);
-  //creating and styling the UI elements
+  //creating and styling the UI elements (a div containing a title, some instruction and three buttons)
   optionsDiv = createDiv();
   optionsDiv.position(20, 20);
   optionsDiv.class("options");
@@ -49,10 +58,11 @@ function setup() {
 }
 
 function draw() {
+  //position of the mouse according to the center of the webGL render
   var realMouseX = mouseX - width / 2;
   var realMouseY = mouseY - height / 2;
 
-  //creating a parabolic function with the mouse position, in order to make a smooth sunrise and sunset effect
+  //creating a parabolic function with the mouse position, in order to make a smooth sunrise and sunset effect (max value = center of the screen, min value = edges)
   var sunLight = -Math.pow(map(mouseX, 0, width, -1, 1), 2);
   //using the function to define the height of the sunlight
   var lightHeight = map(sunLight, -1, 0, 10, 1000);
@@ -73,7 +83,7 @@ function draw() {
     -1000
   );
 
-  //sun
+  //a sphere simulates the sun and changes color according to the current color of the sunlight
   push();
   noStroke();
   rotateZ(map(mouseX, 0, width, -70, -290));
@@ -86,10 +96,10 @@ function draw() {
   sphere(40);
   pop();
 
-  //lets the user drag around the camera
+  //lets the user drag and move the camera
   orbitControl();
 
-  //basis plane
+  //basics plane
   push();
   noStroke();
   rotateX(90);
@@ -102,6 +112,18 @@ function draw() {
     var house = allTheObjects[y];
     house.display();
   }
+
+ //an airplane model appears and rotates in the sky when the third style is selected by the user
+ if(airplaneIsShowing === true){
+ push();
+ noStroke();
+ rotateY(frameCount);
+ translate(400,-800,0);
+ rotateZ(180);
+ texture(airplaneTex);
+ model(airplane);
+ pop();
+ }
 
   //click to change the "style" of the city
   button1.mouseClicked(newCity1);
@@ -167,7 +189,7 @@ function Skyscraper(_height, _x, _z) {
   this.y = -this.buildHeight / 2;
 
   this.display = function() {
-    //a skyscraper composed by one or more box (depending on the random height)
+    //a skyscraper composed by one or more box (depending on the random height, to differentiate more between them)
     push();
     translate(this.x, this.y, this.z);
     push();
@@ -175,6 +197,7 @@ function Skyscraper(_height, _x, _z) {
     specularMaterial(143, 142, 136);
     box(this.buildWidth, this.buildHeight, this.buildWidth);
     pop();
+
     if (this.buildHeight > 400) {
       push();
       noStroke();
@@ -207,9 +230,9 @@ function Tree(_width, _height, _x, _z) {
   this.y = -this.treeHeight / 2;
 
   this.display = function() {
-    //a tree composed by three cones
     push();
     translate(this.x, this.y, this.z);
+    //a green plane serves as grass basis for each tree
     push();
     noStroke();
     translate(0, -this.y - 0.1);
@@ -217,7 +240,7 @@ function Tree(_width, _height, _x, _z) {
     ambientMaterial(118, 189, 60);
     plane(150, 150);
     pop();
-
+    //the tree is composed by three cones
     push();
     noStroke();
     rotateX(180);
@@ -242,20 +265,23 @@ function Tree(_width, _height, _x, _z) {
   };
 }
 
-//creates a new random city with "ancient style" settings
+//creates a new random city with "village style" settings, the airplane doesn't show up
 function newCity1() {
   newCity(citySet[0]);
+  airplaneIsShowing = false;
 }
-//creates a new random city with "contemporary style" settings
+//creates a new random city with "city style" settings, the airplane doesn't show up
 function newCity2() {
   newCity(citySet[1]);
+  airplaneIsShowing = false;
 }
-//creates a new random city with "futuristic style" settings
+//creates a new random city with "metropoli style" settings, the airplane shows up
 function newCity3() {
   newCity(citySet[2]);
+  airplaneIsShowing = true;
 }
 
-//creates a new random city using the different sets of possibility to define a general style
+//creates a new random city using the different sets of possibility passed as argument in the function to define a general style
 function newCity(set) {
   var newObjects = [];
   for (var x = -750; x <= 750; x += 150) {
@@ -273,5 +299,6 @@ function newCity(set) {
       }
     }
   }
+  //updates the objects to be displayed with the new ones
   allTheObjects = newObjects;
 }
