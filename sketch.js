@@ -20,9 +20,9 @@ var airplaneIsShowing = false;
 
 function preload() {
   //preloads the model of the airplane
-  airplane = loadModel("./assets/plane.obj",true);
+  airplane = loadModel("./assets/plane.obj", true);
   //preloads the textures of the airplane
-  airplaneTex = loadImage("./assets/plane_tex.jpg")
+  airplaneTex = loadImage("./assets/plane_tex.jpg");
 }
 
 function setup() {
@@ -70,15 +70,19 @@ function draw() {
   var lightIntensity = map(sunLight, -1, 0, 0, 255);
 
   //background color changes according to the sunlight
-  background(lightIntensity *0.6 + 10, lightIntensity * 0.6, lightIntensity * 1);
+  background(
+    lightIntensity * 0.5 + 10,
+    lightIntensity * 0.7,
+    lightIntensity * 1 + 10
+  );
   //soft ambient light
-  ambientLight(100, 100, 120);
+  ambientLight(80, 80, 110);
   //point light simulating the sun (it feels better than directional light to me)
   pointLight(
-    //making the light turn red near the edges of the screen
-    lightIntensity * 3,
-    lightIntensity,
-    lightIntensity,
+    //making the light turn red near the edges of the screen and white around the center
+    lightIntensity * 3 + 10,
+    lightIntensity + 10,
+    lightIntensity + 10,
     -realMouseX,
     -lightHeight,
     -1000
@@ -114,17 +118,17 @@ function draw() {
     house.display();
   }
 
- //an airplane model appears and rotates in the sky when the third style is selected by the user
- if(airplaneIsShowing === true){
- push();
- noStroke();
- rotateY(frameCount);
- translate(400,-800,0);
- rotateZ(180);
- texture(airplaneTex);
- model(airplane);
- pop();
- }
+  //an airplane model appears and rotates in the sky when the third style is selected by the user
+  if (airplaneIsShowing === true) {
+    push();
+    noStroke();
+    rotateY(frameCount);
+    translate(400, -800, 0);
+    rotateZ(180);
+    texture(airplaneTex);
+    model(airplane);
+    pop();
+  }
 
   //click to change the "style" of the city
   button1.mouseClicked(newCity1);
